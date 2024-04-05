@@ -1,4 +1,4 @@
-
+const initDb = require('../js/config/db')
 const express = require('express');
 const axios = require('axios');
 
@@ -29,3 +29,5 @@ app.get('/users/:userId', async (req, res) => {
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
+initDb()
