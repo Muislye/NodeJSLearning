@@ -15,6 +15,7 @@ async function getUserData(userId) {
     throw error;
   }
 }
+
 //get user by ID from mongodb
 async function getUserById(userId) {
   try {
@@ -25,6 +26,7 @@ async function getUserById(userId) {
   }
 }
 
+//Create a user in MongoDB
 async function createUser(userData) {
   try {
     const date = new Date();
@@ -39,21 +41,28 @@ async function createUser(userData) {
 }
 
 //When trying to create a user, if the user exist then this method will be called and will updated the 'updatedAt' attribute from the user.
-async function updateUser(userId){
-  try{
-    const date = new Date()
-    const updatedAt = date
-    const userUpdated =  userSchema.updateOne({id: userId}, { $set: {updatedAt} })
-    return userUpdated
-  }catch(err){console.log(err);}
+async function updateUser(userId) {
+  try {
+    const date = new Date();
+    const updatedAt = date;
+    const userUpdated = userSchema.updateOne(
+      { id: userId },
+      { $set: { updatedAt } }
+    );
+    return userUpdated;
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 //Remove a user from MongoDB
-async function removeUser(userId){
-  try{
-   const removedUser = userSchema.deleteOne({id: userId})
-   return removedUser
-  }catch(err){console.log(err);}
+async function removeUser(userId) {
+  try {
+    const removedUser = userSchema.deleteOne({ id: userId });
+    return removedUser;
+  } catch (err) {
+    console.log(err);
+  }
 }
 
 //get user from given API
@@ -79,33 +88,34 @@ router.get("/getUser/:userId", async (req, res) => {
   }
 });
 
-router.get('/updateUser')
-
 //Get user from https://jsonplaceholder.typicode.com/users/ and then post it on the DB
 router.get("/createUser/:userId", async (req, res) => {
   try {
     const userId = req.params.userId;
-    const userExist = await getUserById(userId)
-    console.log(userExist.length)
-    if(userExist.length === 1){
-      const userUpdated = await updateUser(userId)
-      res.json(userUpdated)
-    }else{
+    const userExist = await getUserById(userId);
+    console.log(userExist.length);
+    if (userExist.length === 1) {
+      const userUpdated = await updateUser(userId);
+      res.json(userUpdated);
+    } else {
       const userData = await getUserData(userId);
-      const newUser = await createUser(userData)
-      res.json(newUser)
+      const newUser = await createUser(userData);
+      res.json(newUser);
     }
   } catch (error) {
     res.status(500).json({ error: "Error fetching user data" });
   }
 });
 
-router.delete('/removeUser/:userId', async (req, res) => {
-    try{
-      const userId = req.params.userId
-      const removedUser = await removeUser(userId)
-      res.json(removedUser)
-    }catch(err){err}
-})
+//API call for remove a user from MongoDB
+router.delete("/removeUser/:userId", async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const removedUser = await removeUser(userId);
+    res.json(removedUser);
+  } catch (err) {
+    err;
+  }
+});
 
 module.exports = router;
