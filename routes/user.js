@@ -93,7 +93,6 @@ router.get("/createUser/:userId", async (req, res) => {
   try {
     const userId = req.params.userId;
     const userExist = await getUserById(userId);
-    console.log(userExist.length);
     if (userExist.length === 1) {
       const userUpdated = await updateUser(userId);
       res.json(userUpdated);
@@ -114,7 +113,7 @@ router.delete("/removeUser/:userId", async (req, res) => {
     const removedUser = await removeUser(userId);
     res.json(removedUser);
   } catch (err) {
-    err;
+    console.log(err);
   }
 });
 

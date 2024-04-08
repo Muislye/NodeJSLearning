@@ -1,4 +1,4 @@
-const initDb = require('../js/config/db')
+const initDb = require('./config/db.js')
 const express = require('express');
 const userRoutes = require('./routes/user.js')
 const app = express();
